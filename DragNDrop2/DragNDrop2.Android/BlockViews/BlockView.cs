@@ -17,8 +17,8 @@ namespace DragNDrop2.Droid.BlockViews
 {
     public abstract class BlockView : CardView
     {
-        private const int DefaultWidthDp = 200;
-        private const int DefaultHeightDp = 120;
+        public const int DefaultWidthDp = 200;
+        public const int DefaultHeightDp = 120;
 
         protected BlockView(Context context) : base(context)
         {

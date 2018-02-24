@@ -98,6 +98,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BlockViews\BlockView.cs" />
+    <Compile Include="BlockViews\Container\ConditionContainer.cs" />
+    <Compile Include="BlockViews\Container\Container.cs" />
+    <Compile Include="BlockViews\Container\ContainerBlockView.cs" />
+    <Compile Include="BlockViews\Container\ForBlockView.cs" />
+    <Compile Include="BlockViews\Container\IfBlockView.cs" />
+    <Compile Include="BlockViews\Container\InstructionContainer.cs" />
     <Compile Include="BlockViews\RecyclerBlockView.cs" />
     <Compile Include="BlockViews\Simple\InstructionBlockView.cs" />
     <Compile Include="BlockViews\Simple\SimpleBlockView.cs" />
@@ -113,6 +119,12 @@
     <None Include="Properties\AndroidManifest.xml" />
     <None Include="Assets\AboutAssets.txt" />
     <AndroidResource Include="Resources\layout\RecyclerBlockView.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\CardviewIf.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\CardviewFor.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
@@ -133,9 +145,7 @@
       <Name>DragNDrop2</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="BlockViews\Container\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\turn_left.png" />
   </ItemGroup>

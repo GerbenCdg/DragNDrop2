@@ -7,6 +7,7 @@ using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
 using DragNDrop2.Droid.BlockViews;
+using DragNDrop2.Droid.BlockViews.Container;
 using DragNDrop2.Droid.BlockViews.Simple;
 using Java.Lang;
 using Math = Java.Lang.Math;
@@ -177,27 +178,25 @@ namespace DragNDrop2.Droid
                 }
             }
 
-            // TODO if hoveredView is InstructionContainer
-
-            if (hoveredIsRv)
-            {
-                hoveredContainer = (ViewGroup)hoveredView;
-            }
-
-            /*
-             *  if (hoveredView instanceof InstructionContainer || hoveredIsRv) {
+            if (hoveredView is InstructionContainer || hoveredIsRv) {
             // It can be an InstructionContainer or a ConditionContainer
             hoveredContainer = (ViewGroup) hoveredView;
 
-            if (hoveredView instanceof InstructionContainer) {
-                if ((((BlockView) hoveredView.getParent().getParent())).getDepth() >= MAX_BLOCK_DEPTH
-                        && dragged instanceof ContainerBlockView) {
-                    Toast.makeText(this, "Forbidden to nest more than " + MAX_BLOCK_DEPTH + " Blocks in depth.", Toast.LENGTH_SHORT).show();
+                // TODO Tabs
+                // TODO centrer texte dans RecyclerBlockViews
+                // TODO solve problem : Si les InstructionContainer sont acceptés pour le onDrag(true returned dans DragAction.Started)
+                // TODO , alors des problemes de scroll apparaissent dans le RecyclerView.
+                // TODO scroll automatique aux bords
+            
+                if (hoveredView is InstructionContainer) {
+                if (((BlockView) hoveredView.Parent.Parent).Depth >= MaxBlockDepth
+                        && dragged is ContainerBlockView) {
+                    Toast.MakeText(this, "Forbidden to nest more than " + MaxBlockDepth + " Blocks in depth.", ToastLength.Long).Show();
                     return false;
                 }
             }
         }
-            */
+            
 
             switch (e.Action)
             {

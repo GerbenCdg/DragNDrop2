@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Android.Graphics.Drawables;
 using Android.Support.V7.Widget;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
 using DragNDrop2.Droid.BlockViews;
+using DragNDrop2.Droid.BlockViews.Container;
 using DragNDrop2.Droid.BlockViews.Simple;
 using Java.Lang;
 
@@ -56,9 +58,9 @@ namespace DragNDrop2.Droid
                 new TextBlockView(ac, "Action 1"),
                 new TextBlockView(ac, "Action 2"),
                 new InstructionBlockView(ac, Resource.Drawable.turn_left, "Turn Left"),
-                new InstructionBlockView(ac, Resource.Drawable.turn_right, "Turn Right")
-                // new ForBlockView(ac),
-                // new IfBlockView(ac)
+                new InstructionBlockView(ac, Resource.Drawable.turn_right, "Turn Right"),
+                new ForBlockView(ac),
+                new IfBlockView(ac)
             };
 
             FilteredBvs = new List<BlockView>();
@@ -90,6 +92,7 @@ namespace DragNDrop2.Droid
             {
                 holder.SetDrawable(null);
             }
+
             holder.RecyclerBv.SetOnTouchListener(Ma);
             holder.RecyclerBv.SetOnDragListener(Ma);
         }
@@ -114,19 +117,13 @@ namespace DragNDrop2.Droid
                 return;
             }
 
-            foreach (var bv in BlockViews)
+            BlockViews.ForEach(bv =>
             {
-                foreach (var cat in bv.GetCategories())
+                if (bv.GetCategories().Contains(category))
                 {
-                    if (cat.Equals(category))
-                    {
-                        FilteredBvs.Add(bv);
-                        break;
-                    }
+                    FilteredBvs.Add(bv);
                 }
-            }
+            });
         }
-
-        // TODO RecyclerBlockView.axml --> element "..." is not declared
     }
 }
