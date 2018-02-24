@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<DragNDrop2.Droid.BlockViews.RecyclerBlockView
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/card_view"
+  android:layout_width="160dp"
+  android:layout_margin="12dp"
+  android:layout_height="100dp"
+  card_view:cardCornerRadius="4dp"
+  card_view:cardElevation="2dp"
+  xmlns:card_view="http://schemas.android.com/apk/res-auto">
+
+  <RelativeLayout
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <ImageView
+      android:layout_width="match_parent"
+      android:layout_height="78dp"
+      android:id="@+id/rbv_imageview"
+      android:padding="4dp" />
+
+    <TextView
+      android:id="@+id/tv_blockname"
+      android:layout_width="match_parent"
+      android:textSize="12sp"
+      android:layout_centerVertical="true"
+      android:textAlignment="center"
+      android:layout_below="@id/rbv_imageview"
+      android:text="Turn Right"
+      android:layout_height="wrap_content" />
+
+  </RelativeLayout>
+</DragNDrop2.Droid.BlockViews.RecyclerBlockView>
