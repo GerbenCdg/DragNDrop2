@@ -52,14 +52,13 @@ namespace DragNDrop2.Droid
                 Ll.AddView(textBv);
 
                 textBv.SetOnTouchListener(this);
-                textBv.SetOnDragListener(this);
             }
 
             Handler = new Handler();
 
             void SmoothScrollCheck()
             {
-                Log("SmoothScrollCheck");
+                //  Log("SmoothScrollCheck");
                 if (SmoothScrolling)
                 {
                     ScrollView.ScrollBy(0, IsScrollingUp ? 15 : -15);
@@ -68,13 +67,8 @@ namespace DragNDrop2.Droid
                 Handler.PostDelayed(SmoothScrollCheck, 1000 / 60);
             }
 
-            new Runnable(() =>
-            {
-                Handler.PostDelayed(SmoothScrollCheck, 1000 / 60);
-            }).Run();
-
+            new Runnable(() => { Handler.PostDelayed(SmoothScrollCheck, 1000 / 60); }).Run();
         }
-
 
 
         private int Count { get; set; }
@@ -117,15 +111,16 @@ namespace DragNDrop2.Droid
 
             if (LastTouchedView.Parent is RecyclerView && (dX > dY)
                 || LastTouchedView.Parent is LinearLayout && dY > dX)
+            {
                 return false;
+            }
 
             if (view is RecyclerBlockView recyclerBlockView)
             {
                 if (!HasCloned)
                 {
+                    // OnTouchListener is set in DragAction.OnDrop, and OnDragListener doesn't need to be set on the BlockView, as it's set in the ctor of ContainerBlockView ! 
                     LastClonedRbv = recyclerBlockView.Clone();
-                    LastClonedRbv.SetOnTouchListener(this);
-                    LastClonedRbv.SetOnDragListener(this);
                     HasCloned = true;
                 }
 
@@ -138,10 +133,6 @@ namespace DragNDrop2.Droid
                 new[] {ClipDescription.MimetypeTextPlain},
                 new ClipData.Item("dragged"));
 
-            if (view is RecyclerBlockView)
-            {
-                view.Visibility = ViewStates.Visible;
-            }
 
             if (view.StartDragAndDrop(clipData, new View.DragShadowBuilder(LastTouchedView), view, 0))
             {
@@ -169,6 +160,7 @@ namespace DragNDrop2.Droid
 
             Log("HoveredView : " + hoveredView);
             Log("HoveredView.Parent : " + hoveredView.Parent);
+            //Log("Dragged.Parent : " + (dragged.Parent is FrameLayout)); // FrameLayout --> Dragged is a CloneInstance
 
             if (hoveredView is LinearLayout layout)
             {
@@ -178,25 +170,36 @@ namespace DragNDrop2.Droid
                 }
             }
 
-            if (hoveredView is InstructionContainer || hoveredIsRv) {
-            // It can be an InstructionContainer or a ConditionContainer
-            hoveredContainer = (ViewGroup) hoveredView;
+            if (hoveredView is InstructionContainer || hoveredIsRv)
+            {
+                // It can be an InstructionContainer or a ConditionContainer
+                hoveredContainer = (ViewGroup) hoveredView;
 
                 // TODO Tabs
-                // TODO centrer texte dans RecyclerBlockViews
                 // TODO solve problem : Si les InstructionContainer sont acceptés pour le onDrag(true returned dans DragAction.Started)
                 // TODO , alors des problemes de scroll apparaissent dans le RecyclerView.
                 // TODO scroll automatique aux bords
-            
-                if (hoveredView is InstructionContainer) {
-                if (((BlockView) hoveredView.Parent.Parent).Depth >= MaxBlockDepth
-                        && dragged is ContainerBlockView) {
-                    Toast.MakeText(this, "Forbidden to nest more than " + MaxBlockDepth + " Blocks in depth.", ToastLength.Long).Show();
-                    return false;
+
+                if (hoveredView is InstructionContainer)
+                {
+                    if (((BlockView) hoveredView.Parent.Parent).Depth >= MaxBlockDepth
+                        && dragged is ContainerBlockView)
+                    {
+                        Toast.MakeText(this, "Forbidden to nest more than " + MaxBlockDepth + " Blocks in depth.",
+                            ToastLength.Long).Show();
+                        return false;
+                    }
                 }
+
+                // dragged.Parent is FrameLayout --> Dragged is a CloneInstance placed in the RecyclerView 
+                // this appears not to be the origin of the problem
+//                if (hoveredIsRv && dragged.Parent is FrameLayout)
+//                {
+//                    Log("dragged == LastClonedRbv TRUE");
+//                    return false;
+//                }
             }
-        }
-            
+
 
             switch (e.Action)
             {
@@ -206,9 +209,6 @@ namespace DragNDrop2.Droid
                     bool res = hoveredContainer != null;
                     Log("Res : " + res);
                     Log("Dragged : " + dragged);
-
-                    // TODO check this line of code
-                    dragged.SetOnDragListener(null);
                     return res;
 
                 case DragAction.Entered:
@@ -290,7 +290,9 @@ namespace DragNDrop2.Droid
                     if (LastTouchedView is RecyclerBlockView view)
                     {
                         view.RemoveCloneInstance();
+                        Log("LastTouchedView : RBV : " + view);
                         Count = 0; // ensures we will make a new copy if this view is dragged again from the RecyclerView
+                        LastClonedRbv.SetOnTouchListener(this);
                     }
 
                     if (hoveredIsRv) return true;
@@ -301,8 +303,8 @@ namespace DragNDrop2.Droid
                         ResetDraggedView(dragged);
                     }
 
-                    // sov 10988671 TODO test this
-                    dragged.Post(delegate { dragged.Visibility = ViewStates.Visible; });
+                    // sov 10988671
+                    dragged.Post(() => { dragged.Visibility = ViewStates.Visible; });
 
                     return true;
             }
@@ -359,7 +361,8 @@ namespace DragNDrop2.Droid
         private void ResetDraggedView(View dragged)
         {
             Log("LastTouchedView : " + LastTouchedView);
-            if (LastTouchedView is RecyclerBlockView) {
+            if (LastTouchedView is RecyclerBlockView)
+            {
                 return;
             }
 
@@ -382,7 +385,5 @@ namespace DragNDrop2.Droid
                                                                              SystemUiFlags.ImmersiveSticky);
             }
         }
-
-
     }
 }

@@ -19,7 +19,6 @@ namespace DragNDrop2.Droid.BlockViews.Container
         protected Container(Context context) : base(context)
         {
             base.Orientation = Orientation.Vertical;
-            //LayoutParameters = new ViewGroup.LayoutParams(DefaultWidth, DefaultHeight);
             base.SetBackgroundColor(Color.ParseColor("#FFFFFF"));
 
             var param = new LinearLayout.LayoutParams(new ViewGroup.MarginLayoutParams(DefaultWidth, DefaultHeight));

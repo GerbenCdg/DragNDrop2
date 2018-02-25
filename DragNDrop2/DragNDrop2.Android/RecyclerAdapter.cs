@@ -94,7 +94,6 @@ namespace DragNDrop2.Droid
             }
 
             holder.RecyclerBv.SetOnTouchListener(Ma);
-            holder.RecyclerBv.SetOnDragListener(Ma);
         }
 
         public override int ItemCount => FilteredBvs.Count;

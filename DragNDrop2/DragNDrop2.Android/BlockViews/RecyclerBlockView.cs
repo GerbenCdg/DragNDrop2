@@ -24,12 +24,13 @@ namespace DragNDrop2.Droid.BlockViews
             {
                 RemoveView(RealBv);
             }
+
             RealBv = rbv;
-            RealBv.Visibility = ViewStates.Gone;
-            ((ViewGroup) RealBv.Parent)?.RemoveView(RealBv);
-            AddView(RealBv);
+            // RealBv.Visibility = ViewStates.Gone;
+            // ((ViewGroup) RealBv.Parent)?.RemoveView(RealBv);
+            // AddView(RealBv);
         }
- 
+
 
         // If this RecyclerBlockView already contains a RealBv, remove it, and add a clone of the RealBv in this. 
         // We need to make a clone each time a DragNDrop starts from the RecyclerView to keep unique views in the Main LinearLayout
@@ -58,12 +59,20 @@ namespace DragNDrop2.Droid.BlockViews
 
         public override Categories[] GetCategories()
         {
-            return new []{Categories.Others};
+            return new[] {Categories.Others};
         }
 
         public override string GetBlockName()
         {
-            return "Text BlockView";
+            return "RecyclerBlockView";
         }
+
+        public override string ToString()
+        {
+            var str = "RecyclerBlockView : {\n "  + "\n}";
+            return str;
+        }
+
+       
     }
 }
